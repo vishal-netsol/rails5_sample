@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" data-message-id=<%=message.id%>>
   <div class="card-block">
     <div class="row">
       <div class="col-md-1">
@@ -8,6 +8,9 @@
         <p class="card-text">
           <span class="text-muted"><%= message.user.name %> at <%= message.timestamp %> says</span><br>
           <%= message.body %>
+          <% if message.user == @user %>
+            <span class="pull-right"><a href="javascript:void(0)" class="delete_message btn btn-danger" data-message-id=<%=message.id%>>Delete</a></span>
+          <% end %>
         </p>
       </div>
     </div>

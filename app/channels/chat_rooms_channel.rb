@@ -10,4 +10,8 @@ class ChatRoomsChannel < ApplicationCable::Channel
   def send_message(data)
     current_user.messages.create!(body: data['message'], chat_room_id: data['chat_room_id'])
   end
+
+  def delete_message(data)
+    Message.find(data['message_id']).destroy
+  end
 end

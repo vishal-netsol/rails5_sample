@@ -17,11 +17,19 @@ jQuery(document).on 'turbolinks:load', ->
         # Called when the subscription has been terminated by the server
 
       received: (data) ->
-        messages.append data['message']
-        messages_to_bottom()
+        if data['del_message']
+          messages.children().filter((e) ->
+            parseInt(@dataset.messageId) == data['del_message'].id
+          ).remove()
+        else
+          messages.append data['message']
+          messages_to_bottom()
 
       send_message: (message, chat_room_id) ->
         @perform 'send_message', message: message, chat_room_id: chat_room_id
+
+      delete_message: (message_id) ->
+        @perform 'delete_message', message_id: message_id
 
     $('#new_message').submit (e) ->
       $this = $(this)
@@ -31,3 +39,9 @@ jQuery(document).on 'turbolinks:load', ->
         textarea.val('')
       e.preventDefault()
       return false
+
+    $(document).on 'click', '.delete_message', (e) ->
+      e.preventDefault()
+      messageId = this.dataset.messageId
+      App.global_chat.delete_message messageId
+      return
